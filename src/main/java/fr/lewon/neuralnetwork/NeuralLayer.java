@@ -1,7 +1,6 @@
 package fr.lewon.neuralnetwork;
 
-public class NeuralLayer
-{
+public class NeuralLayer {
 
 	private Neuron[] neurons;
 	

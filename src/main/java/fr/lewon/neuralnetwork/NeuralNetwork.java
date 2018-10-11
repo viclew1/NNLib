@@ -99,18 +99,20 @@ public class NeuralNetwork extends Individual {
 	@Override
 	public void crossover(Individual individu) {
 		NeuralNetwork nn = (NeuralNetwork) individu;
-		if (nn.connections.length!=connections.length) {
+		if (nn.connections.length != connections.length) {
 			return;
 		}
-		int index = new Random().nextInt(connections.length);
-		if (new Random().nextBoolean()) {
+		
+		Random r = new Random();
+		int index = r.nextInt(connections.length);
+		if (r.nextBoolean()) {
 			for (int i = index ; i < connections.length ; i++) {
-				connections[i]=nn.connections[i].deepCopy();
+				connections[i] = nn.connections[i].deepCopy();
 			}
 		}
 		else {
 			for (int i = 0 ; i < index ; i++) {
-				connections[i]=nn.connections[i].deepCopy();
+				connections[i] = nn.connections[i].deepCopy();
 			}
 		}
 	}
@@ -118,8 +120,10 @@ public class NeuralNetwork extends Individual {
 	@Override
 	public void mutate() {
 		int mutationCount = Math.max(1, connections.length/50);
+		Random r = new Random();
 		for (int i = 0 ; i < mutationCount ; i++) {
-			connections[new Random().nextInt(connections.length)].mutate();
+			int mutateIndex = r.nextInt(connections.length);
+			connections[mutateIndex].mutate();
 		}
 	}
 

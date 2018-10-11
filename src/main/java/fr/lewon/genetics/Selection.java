@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import fr.lewon.utils.ArrayUtils;
 
 public class Selection {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Selection.class);
-	
+
 	private Trial trial;
 	private int generationCount;
 	private SelectionTypes selectionType;
@@ -28,7 +28,7 @@ public class Selection {
 		this.crossoverChances = crossoverChances;
 	}
 
-	public Individual lancerSelection() {
+	public Individual start() {
 		double bestGlobalFitness = Double.MIN_VALUE;
 		Individual bestGlobalIndividual = population[0];
 		for (int i=0;i<generationCount;i++) {
@@ -43,9 +43,11 @@ public class Selection {
 				bestGlobalIndividual = findBestIndividual().deepCopy();
 			}
 
-			logger.debug("Best individual this generation : {}", bestGenerationFitness);
-			logger.debug("Best individual (GENES) 		  : {}", bestGlobalIndividual);
-			logger.debug("Best individual (FITNESS) 	  : {}", bestGlobalFitness);
+			logger.debug("Best individual this generation (FITNESS)	: {}", bestGenerationFitness);
+			if (i%20 == 0) {
+				logger.debug("Best individual all generations (GENES)	: {}", bestGlobalIndividual);
+				logger.debug("Best individual all generations (FITNESS)	: {}", bestGlobalFitness);
+			}
 
 			ArrayUtils.INSTANCE.shuffleArray(population);
 
@@ -116,7 +118,7 @@ public class Selection {
 		for (Individual i : population) {
 			fitnessSum+=i.getFitness();
 		}
-		
+
 		Individual[] newPopulation = new Individual[population.length];
 		for (int i=0 ; i<population.length ; i++) {
 			Individual i1 = selectIndividuRoulette(population, fitnessSum);
@@ -125,7 +127,7 @@ public class Selection {
 		}
 		population = newPopulation;
 	}
-	
+
 	private Individual selectIndividuRoulette(Individual[] popRef, double fitnessSum) {
 		double partialFitnessSum = 0;
 		double randomDouble = new Random().nextDouble()*fitnessSum;
