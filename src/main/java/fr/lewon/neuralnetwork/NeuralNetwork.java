@@ -12,8 +12,16 @@ public class NeuralNetwork extends Individual {
 	private Connection[] connections;
 
 
+	public NeuralNetwork(int[] layersSizes) {
+		this(layersSizes, null);
+	}
+	
 	public NeuralNetwork(ActivationFunctions activationFunction, int[] layersSizes) {
 		this(activationFunction, layersSizes, null);
+	}
+	
+	public NeuralNetwork(int[] layersSizes, double[] weights) {
+		this(ActivationFunctions.SIGMOID, layersSizes, weights);
 	}
 
 	public NeuralNetwork(ActivationFunctions activationFunction, int[] layersSizes, double[] weights) {
