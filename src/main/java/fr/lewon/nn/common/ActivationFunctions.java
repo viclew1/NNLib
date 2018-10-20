@@ -1,8 +1,10 @@
-package fr.lewon.neuralnetwork;
+package fr.lewon.nn.common;
+
+import fr.lewon.utils.Value;
 
 public enum ActivationFunctions {
 	
-	SIGMOID( (v) -> { return 1 / (1 + Math.exp(-v)); } );
+	SIGMOID( (v) -> { return new Value(1 / (1 + Math.exp(-v.getVal()))); } );
 
 	private ActivationFunction function;
 	
@@ -10,7 +12,7 @@ public enum ActivationFunctions {
 		this.function = function;
 	}
 	
-	public double process(double value) {
+	public Value process(Value value) {
 		return function.process(value);
 	}
 
@@ -18,6 +20,6 @@ public enum ActivationFunctions {
 
 interface ActivationFunction {
 	
-	Double process(double value);
+	Value process(Value value);
 	
 }

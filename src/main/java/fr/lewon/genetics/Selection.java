@@ -1,11 +1,15 @@
 package fr.lewon.genetics;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.lewon.utils.ArrayUtils;
+import fr.lewon.exceptions.NNException;
+import fr.lewon.utils.ListsUtil;
+import fr.lewon.utils.CloneUtil;
 
 public class Selection {
 
@@ -13,43 +17,56 @@ public class Selection {
 
 	private Trial trial;
 	private int generationCount;
+	private double objectiveFitness;
 	private SelectionTypes selectionType;
-	private Individual[] population;
-	private double mutationChances;
-	private double crossoverChances;
+	private List<Individual> population;
+	private int mutationChances;
+	private int crossoverChances;
 
+	public Selection(Trial trial, List<Individual> population, int generationCount, double objectiveFitness) {
+		this(trial, population, generationCount, objectiveFitness, SelectionTypes.STOCHASTIC_UNIVERSAL_SAMPLING, 10, 50);
+	}
 
-	public Selection(Trial trial, Individual[] population, int generationCount, SelectionTypes selectionType, double mutationChances, double crossoverChances) {
+	public Selection(Trial trial, List<Individual> population, int generationCount, double objectiveFitness, SelectionTypes selectionType, int mutationChances, int crossoverChances) {
 		this.trial = trial;
 		this.population = population;
 		this.generationCount = generationCount;
+		this.objectiveFitness = objectiveFitness;
 		this.selectionType = selectionType;
 		this.mutationChances = mutationChances;
 		this.crossoverChances = crossoverChances;
 	}
 
-	public Individual start() {
+	public Individual start() throws NNException {
 		double bestGlobalFitness = Double.MIN_VALUE;
-		Individual bestGlobalIndividual = population[0];
+		Individual bestGlobalIndividual = null;
 		for (int i=0;i<generationCount;i++) {
 			logger.debug("------ START GENERATION {} ------", i+1);
 			for (Individual indiv : population) {
-				indiv.setFitness(trial.startTrial(indiv));
+				indiv.setFitness(trial.getFitness(indiv));
 			}
 
-			double bestGenerationFitness = findBestIndividual().getFitness();
+			Individual bestIndiv = findBestIndividual();
+			double bestGenerationFitness = bestIndiv.getFitness();
+			
 			if (bestGenerationFitness > bestGlobalFitness) {
 				bestGlobalFitness = bestGenerationFitness;
-				bestGlobalIndividual = findBestIndividual().deepCopy();
+				bestGlobalIndividual = CloneUtil.INSTANCE.deepCopy(bestIndiv);
 			}
 
 			logger.debug("Best individual this generation (FITNESS)	: {}", bestGenerationFitness);
+			
+			if (bestGenerationFitness >= objectiveFitness) {
+				logger.debug("Objective found");
+				return bestIndiv;
+			}
+			
 			if (i%20 == 0) {
 				logger.debug("Best individual all generations (GENES)	: {}", bestGlobalIndividual);
 				logger.debug("Best individual all generations (FITNESS)	: {}", bestGlobalFitness);
 			}
 
-			ArrayUtils.INSTANCE.shuffleArray(population);
+			ListsUtil.INSTANCE.shuffleList(population);
 
 			switch(selectionType) {
 			case ROULETTE:
@@ -66,7 +83,7 @@ public class Selection {
 			}
 		}
 
-		return findBestIndividual();
+		return bestGlobalIndividual;
 	}
 
 	private void tournamentSelection() {
@@ -74,73 +91,73 @@ public class Selection {
 		throw new UnsupportedOperationException("Tournament selection not yet implemented");
 	}
 
-	private Individual[] stochasticNewPopulationGenerator(Individual[] popRef, double fitnessSum) {
-		double deltaP = fitnessSum/popRef.length;
+	private List<Individual> stochasticNewPopulationGenerator(List<Individual> popRef, double fitnessSum) {
+		double deltaP = fitnessSum/popRef.size();
 		double start = new Random().nextDouble()*deltaP;
-		double[] pointers = new double[popRef.length];
+		double[] pointers = new double[popRef.size()];
 		for (int i = 0 ; i<pointers.length ; i++) {
 			pointers[i] = start + i*deltaP;
 		}
 
-		Individual[] newPopulation = new Individual[popRef.length];
-		for (int pointerCpt=0 ; pointerCpt<popRef.length ; pointerCpt++) {
+		List<Individual> newPopulation = new ArrayList<>(popRef.size());
+		for (int pointerCpt=0 ; pointerCpt<popRef.size() ; pointerCpt++) {
 			double p = pointers[pointerCpt];
 			int i = 0;
 			double partialFitnessSum = 0;
-			while ((partialFitnessSum += popRef[i].getFitness()) < p) {
+			while ((partialFitnessSum += popRef.get(i).getFitness()) < p) {
 				i++;
 			}
-			newPopulation[pointerCpt] = popRef[i];
+			newPopulation.add(popRef.get(i));
 		}
 		return newPopulation;
 	}
 
-	private void stochasticUniversalSamplingSelection() {
+	private void stochasticUniversalSamplingSelection() throws NNException {
 		double fitnessSum = 0;
 		for (Individual i : population) {
-			fitnessSum+=i.getFitness();
+			fitnessSum += i.getFitness();
 		}
 
 		Random r = new Random();
 
-		Individual[] matingPopulation = stochasticNewPopulationGenerator(population, fitnessSum);
+		List<Individual> matingPopulation = stochasticNewPopulationGenerator(population, fitnessSum);
 
-		Individual[] newPopulation = new Individual[population.length];
-		for (int i=0;i<population.length;i++) {
-			newPopulation[i] = breed(matingPopulation[r.nextInt(population.length)],matingPopulation[r.nextInt(population.length)]);
+		List<Individual> newPopulation = new ArrayList<>(population.size());
+		for (int i = 0 ; i < population.size() ; i++) {
+			newPopulation.add(breed(matingPopulation.get(r.nextInt(population.size())), matingPopulation.get(r.nextInt(population.size()))));
 		}
 		population = newPopulation;
 	}
 
-	private void rouletteSelection() {
+	private void rouletteSelection() throws NNException {
 
 		double fitnessSum = 0;
 		for (Individual i : population) {
 			fitnessSum+=i.getFitness();
 		}
 
-		Individual[] newPopulation = new Individual[population.length];
-		for (int i=0 ; i<population.length ; i++) {
+		List<Individual> newPopulation = new ArrayList<>(population.size());
+		for (int i=0 ; i<population.size() ; i++) {
 			Individual i1 = selectIndividuRoulette(population, fitnessSum);
 			Individual i2 = selectIndividuRoulette(population, fitnessSum);
-			newPopulation[i] = breed(i1,i2);
+			newPopulation.add(breed(i1,i2));
 		}
 		population = newPopulation;
 	}
 
-	private Individual selectIndividuRoulette(Individual[] popRef, double fitnessSum) {
+	private Individual selectIndividuRoulette(List<Individual> popRef, double fitnessSum) throws NNException {
 		double partialFitnessSum = 0;
 		double randomDouble = new Random().nextDouble()*fitnessSum;
-		for (int j=popRef.length-1 ; j>=0 ; j--) {
-			partialFitnessSum += popRef[j].getFitness();
+		for (int j = popRef.size() - 1 ; j >= 0 ; j--) {
+			partialFitnessSum += popRef.get(j).getFitness();
 			if (partialFitnessSum >= randomDouble) {
-				return popRef[j];
+				return popRef.get(j);
 			}
 		}
 		return null;
 	}
 
-	private Individual breed(Individual i1, Individual i2) {
+	private Individual breed(Individual i1, Individual i2) throws NNException {
 		Individual parent1,parent2;
 		Random r = new Random();
 		if (r.nextBoolean()) {
@@ -151,14 +168,13 @@ public class Selection {
 			parent1 = i2;
 			parent2 = i1;
 		}
-		Individual child = parent1.deepCopy();
+		Individual child = CloneUtil.INSTANCE.deepCopy(parent1);
 
-		double rdm=r.nextDouble();
-		if (rdm >= 1 - crossoverChances) {
+		int rdm=r.nextInt(100);
+		if (rdm >= 100 - crossoverChances) {
 			child.crossover(parent2);
 		}
-		rdm = r.nextDouble();
-		if (rdm >= 1 - mutationChances) {
+		if (rdm >= 100 - mutationChances) {
 			child.mutate();
 		}
 
@@ -167,7 +183,7 @@ public class Selection {
 	}
 
 	private Individual findBestIndividual() {
-		Individual bestIndividual = population[0];
+		Individual bestIndividual = null;
 		double bestScore = Double.MIN_VALUE;
 		for (Individual i : population) {
 			double score = i.getFitness();
