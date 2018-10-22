@@ -7,6 +7,6 @@ import fr.lewon.utils.Pair;
 
 public interface Selection {
 
-	List<Pair<Individual>> getNextGeneration(List<Individual> population);
+	List<Pair<Individual>> getNextGenerationParents(List<Individual> population);
 	
 }

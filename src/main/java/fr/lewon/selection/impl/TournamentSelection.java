@@ -15,12 +15,12 @@ public class TournamentSelection implements Selection {
 	private Random random = new Random();
 	
 	@Override
-	public List<Pair<Individual>> getNextGeneration(List<Individual> population) {
-		List<Pair<Individual>> nextGeneration = new ArrayList<>();
+	public List<Pair<Individual>> getNextGenerationParents(List<Individual> population) {
+		List<Pair<Individual>> nextGenerationParents = new ArrayList<>();
 		for (int i = 0 ; i < population.size() ; i++) {
-			nextGeneration.add(new Pair<>(tournament(population), tournament(population)));
+			nextGenerationParents.add(new Pair<>(tournament(population), tournament(population)));
 		}
-		return nextGeneration;
+		return nextGenerationParents;
 	}
 
 	private Individual tournament(List<Individual> population) {

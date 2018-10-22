@@ -1,6 +1,5 @@
 package fr.lewon;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -67,7 +66,7 @@ public class SelectionProcessor {
 
 			ListsUtil.INSTANCE.shuffleList(population);
 
-			List<Pair<Individual>> breedingPopulation = selection.getNextGeneration(population);
+			List<Pair<Individual>> breedingPopulation = selection.getNextGenerationParents(population);
 			population.clear();
 			for (Pair<Individual> parents : breedingPopulation) {
 				population.add(breed(parents.getLeft(), parents.getRight()));
@@ -75,72 +74,6 @@ public class SelectionProcessor {
 		}
 
 		return bestGlobalIndividual;
-	}
-
-	private List<Individual> stochasticNewPopulationGenerator(List<Individual> popRef, double fitnessSum) {
-		double deltaP = fitnessSum/popRef.size();
-		double start = new Random().nextDouble()*deltaP;
-		double[] pointers = new double[popRef.size()];
-		for (int i = 0 ; i<pointers.length ; i++) {
-			pointers[i] = start + i*deltaP;
-		}
-
-		List<Individual> newPopulation = new ArrayList<>(popRef.size());
-		for (int pointerCpt=0 ; pointerCpt<popRef.size() ; pointerCpt++) {
-			double p = pointers[pointerCpt];
-			int i = 0;
-			double partialFitnessSum = 0;
-			while ((partialFitnessSum += popRef.get(i).getFitness()) < p) {
-				i++;
-			}
-			newPopulation.add(popRef.get(i));
-		}
-		return newPopulation;
-	}
-
-	private void stochasticUniversalSamplingSelection() throws NNException {
-		double fitnessSum = 0;
-		for (Individual i : population) {
-			fitnessSum += i.getFitness();
-		}
-
-		Random r = new Random();
-
-		List<Individual> matingPopulation = stochasticNewPopulationGenerator(population, fitnessSum);
-
-		List<Individual> newPopulation = new ArrayList<>(population.size());
-		for (int i = 0 ; i < population.size() ; i++) {
-			newPopulation.add(breed(matingPopulation.get(r.nextInt(population.size())), matingPopulation.get(r.nextInt(population.size()))));
-		}
-		population = newPopulation;
-	}
-
-	private void rouletteSelection() throws NNException {
-
-		double fitnessSum = 0;
-		for (Individual i : population) {
-			fitnessSum+=i.getFitness();
-		}
-
-		List<Individual> newPopulation = new ArrayList<>(population.size());
-		for (int i=0 ; i<population.size() ; i++) {
-			Individual i1 = selectIndividuRoulette(population, fitnessSum);
-			Individual i2 = selectIndividuRoulette(population, fitnessSum);
-			newPopulation.add(breed(i1,i2));
-		}
-		population = newPopulation;
-	}
-
-	private Individual selectIndividuRoulette(List<Individual> popRef, double fitnessSum) throws NNException {
-		double partialFitnessSum = 0;
-		double randomDouble = new Random().nextDouble()*fitnessSum;
-		for (int j = popRef.size() - 1 ; j >= 0 ; j--) {
-			partialFitnessSum += popRef.get(j).getFitness();
-			if (partialFitnessSum >= randomDouble) {
-				return popRef.get(j);
-			}
-		}
-		return null;
 	}
 
 	private Individual breed(Individual i1, Individual i2) throws NNException {
