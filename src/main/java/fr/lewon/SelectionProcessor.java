@@ -25,7 +25,7 @@ public class SelectionProcessor {
 	private int crossoverChances;
 
 	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount) {
-		this(trial, population, generationCount, Selections.STOCHASTIC_UNIVERSAL_SAMPLING, 10, 50);
+		this(trial, population, generationCount, Selections.TOURNAMENT, 15, 50);
 	}
 
 	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount, Selections selection, int mutationChances, int crossoverChances) {
