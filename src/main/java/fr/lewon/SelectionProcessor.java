@@ -19,27 +19,25 @@ public class SelectionProcessor {
 
 	private Trial trial;
 	private int generationCount;
-	private double objectiveFitness;
 	private Selection selection;
 	private List<Individual> population;
 	private int mutationChances;
 	private int crossoverChances;
 
-	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount, double objectiveFitness) {
-		this(trial, population, generationCount, objectiveFitness, Selections.STOCHASTIC_UNIVERSAL_SAMPLING, 10, 50);
+	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount) {
+		this(trial, population, generationCount, Selections.STOCHASTIC_UNIVERSAL_SAMPLING, 10, 50);
 	}
 
-	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount, double objectiveFitness, Selections selection, int mutationChances, int crossoverChances) {
+	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount, Selections selection, int mutationChances, int crossoverChances) {
 		this.trial = trial;
 		this.population = population;
 		this.generationCount = generationCount;
-		this.objectiveFitness = objectiveFitness;
 		this.selection = selection.getSelection();
 		this.mutationChances = mutationChances;
 		this.crossoverChances = crossoverChances;
 	}
 
-	public Individual start() throws NNException {
+	public Individual start(double objectiveFitness) throws NNException {
 		Individual bestGlobalIndividual = null;
 		for (int i=0;i<generationCount;i++) {
 			logger.debug("------ START GENERATION {} ------", i+1);
