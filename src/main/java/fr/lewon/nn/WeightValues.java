@@ -1,4 +1,4 @@
-package fr.lewon.nn.common;
+package fr.lewon.nn;
 
 import java.util.Random;
 

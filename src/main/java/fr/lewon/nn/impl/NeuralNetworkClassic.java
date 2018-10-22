@@ -1,12 +1,13 @@
 package fr.lewon.nn.impl;
 
 import java.util.List;
+
+import fr.lewon.Individual;
 import fr.lewon.exceptions.DifferentIndivualsException;
 import fr.lewon.exceptions.NNException;
-import fr.lewon.genetics.Individual;
-import fr.lewon.nn.common.ActivationFunctions;
-import fr.lewon.nn.common.Connection;
-import fr.lewon.nn.common.NeuralNetwork;
+import fr.lewon.nn.ActivationFunctions;
+import fr.lewon.nn.Connection;
+import fr.lewon.nn.NeuralNetwork;
 
 public class NeuralNetworkClassic extends NeuralNetwork {
 

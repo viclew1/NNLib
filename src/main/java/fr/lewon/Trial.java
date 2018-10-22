@@ -1,4 +1,4 @@
-package fr.lewon.genetics;
+package fr.lewon;
 
 import fr.lewon.exceptions.NNException;
 

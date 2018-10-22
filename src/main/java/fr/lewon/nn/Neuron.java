@@ -1,4 +1,4 @@
-package fr.lewon.nn.common;
+package fr.lewon.nn;
 
 import fr.lewon.utils.Value;
 import fr.lewon.utils.ValuesUtil;

@@ -1,4 +1,4 @@
-package fr.lewon.genetics;
+package fr.lewon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,37 +8,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.lewon.exceptions.NNException;
+import fr.lewon.selection.Selection;
+import fr.lewon.selection.Selections;
 import fr.lewon.utils.ListsUtil;
+import fr.lewon.utils.Pair;
 import fr.lewon.utils.CloneUtil;
 
-public class Selection {
+public class SelectionProcessor {
 
-	private static final Logger logger = LoggerFactory.getLogger(Selection.class);
+	private static final Logger logger = LoggerFactory.getLogger(SelectionProcessor.class);
 
 	private Trial trial;
 	private int generationCount;
 	private double objectiveFitness;
-	private SelectionTypes selectionType;
+	private Selection selection;
 	private List<Individual> population;
 	private int mutationChances;
 	private int crossoverChances;
 
-	public Selection(Trial trial, List<Individual> population, int generationCount, double objectiveFitness) {
-		this(trial, population, generationCount, objectiveFitness, SelectionTypes.STOCHASTIC_UNIVERSAL_SAMPLING, 10, 50);
+	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount, double objectiveFitness) {
+		this(trial, population, generationCount, objectiveFitness, Selections.STOCHASTIC_UNIVERSAL_SAMPLING, 10, 50);
 	}
 
-	public Selection(Trial trial, List<Individual> population, int generationCount, double objectiveFitness, SelectionTypes selectionType, int mutationChances, int crossoverChances) {
+	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount, double objectiveFitness, Selections selection, int mutationChances, int crossoverChances) {
 		this.trial = trial;
 		this.population = population;
 		this.generationCount = generationCount;
 		this.objectiveFitness = objectiveFitness;
-		this.selectionType = selectionType;
+		this.selection = selection.getSelection();
 		this.mutationChances = mutationChances;
 		this.crossoverChances = crossoverChances;
 	}
 
 	public Individual start() throws NNException {
-		double bestGlobalFitness = Double.MIN_VALUE;
 		Individual bestGlobalIndividual = null;
 		for (int i=0;i<generationCount;i++) {
 			logger.debug("------ START GENERATION {} ------", i+1);
@@ -47,48 +49,32 @@ public class Selection {
 			}
 
 			Individual bestIndiv = findBestIndividual();
-			double bestGenerationFitness = bestIndiv.getFitness();
 			
-			if (bestGenerationFitness > bestGlobalFitness) {
-				bestGlobalFitness = bestGenerationFitness;
+			if (bestGlobalIndividual == null || bestIndiv.getFitness() > bestGlobalIndividual.getFitness()) {
 				bestGlobalIndividual = CloneUtil.INSTANCE.deepCopy(bestIndiv);
 			}
 
-			logger.debug("Best individual this generation (FITNESS)	: {}", bestGenerationFitness);
+			logger.debug("Best individual this generation (FITNESS)	: {}", bestIndiv.getFitness());
 			
-			if (bestGenerationFitness >= objectiveFitness) {
+			if (bestIndiv.getFitness() >= objectiveFitness) {
 				logger.debug("Objective found");
 				return bestIndiv;
 			}
 			
 			if (i%20 == 0) {
-				logger.debug("Best individual all generations (GENES)	: {}", bestGlobalIndividual);
-				logger.debug("Best individual all generations (FITNESS)	: {}", bestGlobalFitness);
+				logger.debug("Best individual all generations (FITNESS)	: {}", bestGlobalIndividual.getFitness());
 			}
 
 			ListsUtil.INSTANCE.shuffleList(population);
 
-			switch(selectionType) {
-			case ROULETTE:
-				rouletteSelection();
-				break;
-			case STOCHASTIC_UNIVERSAL_SAMPLING:
-				stochasticUniversalSamplingSelection();
-				break;
-			case TOURNAMENT:
-				tournamentSelection();
-				break;
-			default:
-				throw new RuntimeException("Untreated selection type");
+			List<Pair<Individual>> breedingPopulation = selection.getNextGeneration(population);
+			population.clear();
+			for (Pair<Individual> parents : breedingPopulation) {
+				population.add(breed(parents.getLeft(), parents.getRight()));
 			}
 		}
 
 		return bestGlobalIndividual;
-	}
-
-	private void tournamentSelection() {
-		//TODO impl
-		throw new UnsupportedOperationException("Tournament selection not yet implemented");
 	}
 
 	private List<Individual> stochasticNewPopulationGenerator(List<Individual> popRef, double fitnessSum) {

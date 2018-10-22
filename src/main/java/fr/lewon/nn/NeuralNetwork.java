@@ -1,13 +1,13 @@
-package fr.lewon.nn.common;
+package fr.lewon.nn;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import fr.lewon.Individual;
 import fr.lewon.exceptions.InputCountException;
 import fr.lewon.exceptions.NNException;
-import fr.lewon.genetics.Individual;
 import fr.lewon.utils.Value;
 
 public abstract class NeuralNetwork extends Individual {

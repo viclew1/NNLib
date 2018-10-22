@@ -1,4 +1,4 @@
-package fr.lewon.nn.common;
+package fr.lewon.nn;
 
 import fr.lewon.utils.Value;
 
@@ -9,9 +9,7 @@ public class BiasNeuron extends AbstractNeuron {
 	}
 
 	@Override
-	public void reset() {
-		
-	}
+	public void reset() {}
 
 	@Override
 	public Value getValue() {

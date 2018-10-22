@@ -1,4 +1,5 @@
-package fr.lewon.genetics;
+package fr.lewon;
+
 
 import java.util.List;
 
