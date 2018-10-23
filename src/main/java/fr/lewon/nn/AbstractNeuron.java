@@ -8,7 +8,7 @@ import fr.lewon.utils.Value;
 
 public abstract class AbstractNeuron {
 
-	private static AtomicLong ID_GENERATOR = new AtomicLong();
+	private static final AtomicLong ID_GENERATOR = new AtomicLong();
 	
 	private final Long id;
 	private List<Connection> incomingConnections;

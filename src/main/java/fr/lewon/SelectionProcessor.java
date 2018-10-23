@@ -18,26 +18,22 @@ public class SelectionProcessor {
 	private static final Logger logger = LoggerFactory.getLogger(SelectionProcessor.class);
 
 	private Trial trial;
-	private int generationCount;
 	private Selection selection;
-	private List<Individual> population;
 	private int mutationChances;
 	private int crossoverChances;
 
-	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount) {
-		this(trial, population, generationCount, Selections.TOURNAMENT, 15, 50);
+	public SelectionProcessor(Trial trial) {
+		this(trial, Selections.TOURNAMENT, 15, 50);
 	}
 
-	public SelectionProcessor(Trial trial, List<Individual> population, int generationCount, Selections selection, int mutationChances, int crossoverChances) {
+	public SelectionProcessor(Trial trial, Selections selection, int mutationChances, int crossoverChances) {
 		this.trial = trial;
-		this.population = population;
-		this.generationCount = generationCount;
 		this.selection = selection.getSelection();
 		this.mutationChances = mutationChances;
 		this.crossoverChances = crossoverChances;
 	}
 
-	public Individual start(double objectiveFitness) throws NNException {
+	public Individual start(List<Individual> population, int generationCount, double objectiveFitness) throws NNException {
 		Individual bestGlobalIndividual = null;
 		for (int i=0;i<generationCount;i++) {
 			logger.debug("------ START GENERATION {} ------", i+1);
@@ -45,7 +41,7 @@ public class SelectionProcessor {
 				indiv.setFitness(trial.getFitness(indiv));
 			}
 
-			Individual bestIndiv = findBestIndividual();
+			Individual bestIndiv = findBestIndividual(population);
 			
 			if (bestGlobalIndividual == null || bestIndiv.getFitness() > bestGlobalIndividual.getFitness()) {
 				bestGlobalIndividual = CloneUtil.INSTANCE.deepCopy(bestIndiv);
@@ -99,7 +95,7 @@ public class SelectionProcessor {
 		return child;
 	}
 
-	private Individual findBestIndividual() {
+	private Individual findBestIndividual(List<Individual> population) {
 		Individual bestIndividual = null;
 		double bestScore = Double.MIN_VALUE;
 		for (Individual i : population) {
