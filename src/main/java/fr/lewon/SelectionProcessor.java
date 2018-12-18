@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import fr.lewon.exceptions.NNException;
 import fr.lewon.selection.Selection;
 import fr.lewon.selection.Selections;
+import fr.lewon.utils.CloneUtil;
 import fr.lewon.utils.ListsUtil;
 import fr.lewon.utils.Pair;
-import fr.lewon.utils.CloneUtil;
 
 public class SelectionProcessor {
 
@@ -23,12 +23,12 @@ public class SelectionProcessor {
 	private int crossoverChances;
 
 	public SelectionProcessor(Trial trial) {
-		this(trial, Selections.TOURNAMENT, 15, 50);
+		this(trial, Selections.TOURNAMENT.getSelection(), 15, 50);
 	}
 
-	public SelectionProcessor(Trial trial, Selections selection, int mutationChances, int crossoverChances) {
+	public SelectionProcessor(Trial trial, Selection selection, int mutationChances, int crossoverChances) {
 		this.trial = trial;
-		this.selection = selection.getSelection();
+		this.selection = selection;
 		this.mutationChances = mutationChances;
 		this.crossoverChances = crossoverChances;
 	}
