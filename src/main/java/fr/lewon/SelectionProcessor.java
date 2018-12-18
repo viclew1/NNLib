@@ -97,11 +97,8 @@ public class SelectionProcessor {
 
 	private Individual findBestIndividual(List<Individual> population) {
 		Individual bestIndividual = null;
-		double bestScore = Double.MIN_VALUE;
 		for (Individual i : population) {
-			double score = i.getFitness();
-			if (score > bestScore) {
-				bestScore = score;
+			if (bestIndividual == null || i.getFitness() > bestIndividual.getFitness()) {
 				bestIndividual = i;
 			}
 		}

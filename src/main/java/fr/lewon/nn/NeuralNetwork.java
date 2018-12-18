@@ -93,6 +93,16 @@ public abstract class NeuralNetwork extends Individual {
 				.collect(Collectors.toList());
 	}
 	
+	@Override
+	public Integer getExpectedInputCount() {
+		return inputLayer.getNeurons().size();
+	}
+
+	@Override
+	public Integer getExpectedOutputCount() {
+		return outputLayer.getNeurons().size();
+	}
+
 	protected List<Connection> flatten() {
 		List<NeuralLayer> allLayers = new ArrayList<>();
 		allLayers.add(inputLayer);

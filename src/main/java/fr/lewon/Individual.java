@@ -33,6 +33,19 @@ public abstract class Individual {
 	 */
 	public abstract void mutate() throws NNException;
 	
+	
+	/**
+	 * Returns the amount of input expected by this individual
+	 * @return
+	 */
+	public abstract Integer getExpectedInputCount();
+	
+	/**
+	 * Returns the amount of outputs you will get after calling <code>getOutputs()</code>
+	 * @return
+	 */
+	public abstract Integer getExpectedOutputCount();
+	
 	/**
 	 * Returns an array of double representing the outputs computed based on the passed inputs
 	 * @param inputs
