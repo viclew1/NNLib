@@ -8,7 +8,7 @@ import fr.lewon.Individual;
 import fr.lewon.selection.Selection;
 import fr.lewon.utils.Pair;
 
-public class RouletteSelection implements Selection {
+public class RouletteSelection extends Selection {
 
 	@Override
 	public List<Pair<Individual>> getNextGenerationParents(List<Individual> population) {

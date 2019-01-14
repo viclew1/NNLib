@@ -5,8 +5,8 @@ import java.util.List;
 import fr.lewon.Individual;
 import fr.lewon.utils.Pair;
 
-public interface Selection {
+public abstract class Selection {
 
-	List<Pair<Individual>> getNextGenerationParents(List<Individual> population);
+	public abstract List<Pair<Individual>> getNextGenerationParents(List<Individual> population);
 	
 }

@@ -10,8 +10,8 @@ public enum ValuesUtil {
 	public static final double MAX_WEIGHT =  5;
 	public static final double DELTA_WEIGHT = 0.5;
 	
-	public Value getRandomValue() {
-		return new Value(MIN_WEIGHT + new Random().nextDouble()*(MAX_WEIGHT-MIN_WEIGHT));
+	public double getRandomValue() {
+		return MIN_WEIGHT + new Random().nextDouble()*(MAX_WEIGHT-MIN_WEIGHT);
 	}
 	
 	public Value addValues(Value v1, Value v2) {

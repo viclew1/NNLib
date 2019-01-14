@@ -8,7 +8,7 @@ import fr.lewon.Individual;
 import fr.lewon.selection.Selection;
 import fr.lewon.utils.Pair;
 
-public class StochasticUniversalSamplingSelection implements Selection {
+public class StochasticUniversalSamplingSelection extends Selection {
 
 	private Random random = new Random();
 	

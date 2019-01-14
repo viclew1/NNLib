@@ -8,10 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import fr.lewon.exceptions.NNException;
 import fr.lewon.selection.Selection;
-import fr.lewon.selection.Selections;
+import fr.lewon.selection.SelectionType;
 import fr.lewon.utils.CloneUtil;
 import fr.lewon.utils.ListsUtil;
 import fr.lewon.utils.Pair;
+import fr.lewon.utils.PopulationInfos;
 
 public class SelectionProcessor {
 
@@ -19,14 +20,14 @@ public class SelectionProcessor {
 
 	private Trial trial;
 	private Selection selection;
-	private int mutationChances;
-	private int crossoverChances;
+	private double mutationChances;
+	private double crossoverChances;
 
 	public SelectionProcessor(Trial trial) {
-		this(trial, Selections.TOURNAMENT.getSelection(), 15, 50);
+		this(trial, SelectionType.ROULETTE.getSelectionImpl(), 0.05, 0.5);
 	}
 
-	public SelectionProcessor(Trial trial, Selection selection, int mutationChances, int crossoverChances) {
+	public SelectionProcessor(Trial trial, Selection selection, double mutationChances, double crossoverChances) {
 		this.trial = trial;
 		this.selection = selection;
 		this.mutationChances = mutationChances;
@@ -49,6 +50,9 @@ public class SelectionProcessor {
 
 			logger.debug("Best individual this generation (FITNESS)	: {}", bestIndiv.getFitness());
 			
+			PopulationInfos infos = new PopulationInfos(population);
+			trial.processBetweenGenerationsActions(infos);
+			
 			if (bestIndiv.getFitness() >= objectiveFitness) {
 				logger.debug("Objective found");
 				return bestIndiv;
@@ -63,31 +67,22 @@ public class SelectionProcessor {
 			List<Pair<Individual>> breedingPopulation = selection.getNextGenerationParents(population);
 			population.clear();
 			for (Pair<Individual> parents : breedingPopulation) {
-				population.add(breed(parents.getLeft(), parents.getRight()));
+				population.add(breed(parents));
 			}
 		}
 
 		return bestGlobalIndividual;
 	}
 
-	private Individual breed(Individual i1, Individual i2) throws NNException {
-		Individual parent1,parent2;
+	private Individual breed(Pair<Individual> parents) throws NNException {
 		Random r = new Random();
-		if (r.nextBoolean()) {
-			parent1 = i1;
-			parent2 = i2;
-		}
-		else {
-			parent1 = i2;
-			parent2 = i1;
-		}
-		Individual child = CloneUtil.INSTANCE.deepCopy(parent1);
+		Individual child = CloneUtil.INSTANCE.deepCopy(parents.getLeft());
 
-		int rdm=r.nextInt(100);
-		if (rdm >= 100 - crossoverChances) {
-			child.crossover(parent2);
+		double rdm=r.nextDouble();
+		if (rdm < crossoverChances) {
+			child.crossover(parents.getRight());
 		}
-		if (rdm >= 100 - mutationChances) {
+		if (rdm < mutationChances) {
 			child.mutate();
 		}
 

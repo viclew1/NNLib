@@ -8,9 +8,13 @@ import fr.lewon.Individual;
 import fr.lewon.selection.Selection;
 import fr.lewon.utils.Pair;
 
-public class TournamentSelection implements Selection {
+public class TournamentSelection extends Selection {
 
-	private static final int PARTICIPANT_COUNT = 2;
+	private int participantCount = 2;
+	
+	public TournamentSelection(int participantCount) {
+		this.participantCount = participantCount;
+	}
 	
 	private Random random = new Random();
 	
@@ -25,7 +29,7 @@ public class TournamentSelection implements Selection {
 
 	private Individual tournament(List<Individual> population) {
 		Individual best = null;
-		for (int i = 0 ; i < PARTICIPANT_COUNT ; i++) {
+		for (int i = 0 ; i < participantCount ; i++) {
 			Individual indiv = population.get(random.nextInt(population.size()));
 			if (best == null || indiv.getFitness() > best.getFitness()) {
 				best = indiv;
