@@ -15,8 +15,9 @@ public class PopulationInfos {
 	private final double average;
 	private final double standardDeviation;
 	private final double variance;
+	private final int generation;
 	
-	public PopulationInfos(List<Individual> population) {
+	public PopulationInfos(List<Individual> population, int generation) {
 		popCount = population.size();
 		scores = population.stream()
 				.map(Individual::getFitness)
@@ -29,6 +30,7 @@ public class PopulationInfos {
 		average = scores.stream().reduce(0d, (s1, s2) -> s1 + s2) / popCount;
 		variance = scores.stream().collect(Collectors.summingDouble(s -> Math.pow(s - average, 2))) / popCount;
 		standardDeviation = Math.sqrt(variance);
+		this.generation = generation;
 	}
 	
 
@@ -66,6 +68,11 @@ public class PopulationInfos {
 		return "PopulationInfos [popCount=" + popCount + ", scores=" + scores + ", minScore=" + minScore + ", maxScore="
 				+ maxScore + ", average=" + average + ", standardDeviation=" + standardDeviation + ", variance="
 				+ variance + "]";
+	}
+
+
+	public int getGeneration() {
+		return generation;
 	}
 	
 }

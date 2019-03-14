@@ -1,5 +1,6 @@
 package fr.lewon.nn.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.lewon.Individual;
@@ -11,6 +12,10 @@ import fr.lewon.nn.NeuralNetwork;
 
 public class NeuralNetworkClassic extends NeuralNetwork {
 
+	public NeuralNetworkClassic(int inputCount, int outputCount) {
+		this(inputCount, outputCount, new ArrayList<>());
+	}
+	
 	public NeuralNetworkClassic(int inputCount, int outputCount, List<Integer> hiddenLayerSizes) {
 		this(inputCount, outputCount, hiddenLayerSizes, null);
 	}

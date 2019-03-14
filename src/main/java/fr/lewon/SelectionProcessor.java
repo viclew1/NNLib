@@ -36,8 +36,8 @@ public class SelectionProcessor {
 
 	public Individual start(List<Individual> population, int generationCount, double objectiveFitness) throws NNException {
 		Individual bestGlobalIndividual = null;
-		for (int i=0;i<generationCount;i++) {
-			logger.debug("------ START GENERATION {} ------", i+1);
+		for (int i = 1 ; i <= generationCount ; i ++) {
+			logger.debug("------ START GENERATION {} ------", i);
 			for (Individual indiv : population) {
 				indiv.setFitness(trial.getFitness(indiv));
 			}
@@ -50,7 +50,7 @@ public class SelectionProcessor {
 
 			logger.debug("Best individual this generation (FITNESS)	: {}", bestIndiv.getFitness());
 			
-			PopulationInfos infos = new PopulationInfos(population);
+			PopulationInfos infos = new PopulationInfos(population, i);
 			trial.processBetweenGenerationsActions(infos);
 			
 			if (bestIndiv.getFitness() >= objectiveFitness) {
