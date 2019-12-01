@@ -1,40 +1,40 @@
 package fr.lewon.nn;
 
-import fr.lewon.utils.Value;
-
 public class Connection {
 
-	private final AbstractNeuron from;
-	private final AbstractNeuron to;
-	private Value weight;
-	
-	public Connection(AbstractNeuron from, AbstractNeuron to, Value weight) {
-		this.from = from;
-		this.to = to;
-		this.weight = weight;
-	}
+    private final Long from;
+    private final Long to;
+    private double weight;
+    private boolean active;
 
-	public AbstractNeuron getFrom() {
-		return from;
-	}
+    public Connection(Long from, Long to, double weight) {
+        this.from = from;
+        this.to = to;
+        this.weight = weight;
+    }
 
-	public AbstractNeuron getTo() {
-		return to;
-	}
-	
-	public Value getWeight() {
-		return weight;
-	}
+    public boolean isActive() {
+        return this.active;
+    }
 
-	public void setWeight(Value weight) {
-		this.weight = weight;
-	}
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
-	public void randomize() {
-		this.weight = WeightValues.INSTANCE.randomWeight();
-	}
-	
-	public void mutate() {
-		WeightValues.INSTANCE.mutateWeight(this.weight);
-	}
+    public Long getFrom() {
+        return this.from;
+    }
+
+    public Long getTo() {
+        return this.to;
+    }
+
+    public double getWeight() {
+        return this.weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
 }

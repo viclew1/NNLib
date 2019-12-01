@@ -2,13 +2,14 @@ package fr.lewon;
 
 import fr.lewon.exceptions.NNException;
 
-public abstract class Trial {
-	
-	/**
-	 * Submits the passed individual to the trial and returns its fitness
-	 * @param individual
-	 * @throws NNException 
-	 */
-	public abstract double getFitness(Individual individual) throws NNException;
-	
+public interface Trial {
+
+    /**
+     * Submits the passed individual to the trial and returns its fitness
+     *
+     * @param individual
+     * @throws NNException
+     */
+    double getFitness(Individual individual) throws NNException;
+
 }
