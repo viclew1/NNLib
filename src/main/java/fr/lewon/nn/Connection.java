@@ -5,7 +5,7 @@ public class Connection {
     private final Long from;
     private final Long to;
     private double weight;
-    private boolean active;
+    private boolean active = true;
 
     public Connection(Long from, Long to, double weight) {
         this.from = from;

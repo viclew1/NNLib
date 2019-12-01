@@ -17,6 +17,10 @@ public class NeuralNetworkNEAT extends NeuralNetwork {
 
     private Map<Long, Double> neuronsDistanceToInputs;
 
+    public NeuralNetworkNEAT(int inputCount, int outputCount) {
+        this(ActivationFunctions.SIGMOID, inputCount, outputCount);
+    }
+
     public NeuralNetworkNEAT(ActivationFunctions activationFunction, int inputCount, int outputCount) {
         super(activationFunction, inputCount, outputCount);
         this.neuronsDistanceToInputs = new TreeMap<>();

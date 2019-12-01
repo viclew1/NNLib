@@ -31,7 +31,7 @@ public abstract class NeuralNetwork extends Individual {
         for (int i = 0; i < inputCount; i++) {
             inputNeurons.add(this.createNeuron());
         }
-        this.inputLayer = new NeuralLayer(this.createNeuron(), inputNeurons);
+        this.inputLayer = new NeuralLayer(this.createBiasNeuron(), inputNeurons);
 
         List<Long> outputNeurons = new ArrayList<>(outputCount);
         for (int i = 0; i < outputCount; i++) {
@@ -73,7 +73,7 @@ public abstract class NeuralNetwork extends Individual {
 
         // Set input values
         for (int i = 0; i < inputs.size(); i++) {
-            neuronValues.put(Long.valueOf(i), inputs.get(i));
+            neuronValues.put(this.getInputLayer().getNeurons().get(i), inputs.get(i));
         }
 
         // Propagate network
@@ -127,7 +127,7 @@ public abstract class NeuralNetwork extends Individual {
     }
 
     protected List<Connection> getConnectionsTo(Long neuronId) {
-        return this.connectionsByDestId.get(neuronId);
+        return this.connectionsByDestId.getOrDefault(neuronId, new ArrayList<>());
     }
 
     public List<Connection> getConnections() {
