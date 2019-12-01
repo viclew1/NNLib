@@ -1,25 +1,19 @@
 package fr.lewon.nn;
 
-import fr.lewon.utils.Value;
+import java.util.function.Function;
 
 public enum ActivationFunctions {
-	
-	SIGMOID( (v) -> { return new Value(1 / (1 + Math.exp(-v.getVal()))); } );
 
-	private ActivationFunction function;
-	
-	private ActivationFunctions(ActivationFunction function) {
-		this.function = function;
-	}
-	
-	public Value process(Value value) {
-		return function.process(value);
-	}
+    SIGMOID((v) -> 1 / (1 + Math.exp(-v)));
 
-}
+    private Function<Double, Double> function;
 
-interface ActivationFunction {
-	
-	Value process(Value value);
-	
+    ActivationFunctions(Function<Double, Double> function) {
+        this.function = function;
+    }
+
+    public double process(double value) {
+        return this.function.apply(value);
+    }
+
 }
