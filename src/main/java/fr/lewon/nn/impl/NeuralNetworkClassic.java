@@ -53,14 +53,6 @@ public class NeuralNetworkClassic extends NeuralNetwork {
     }
 
     @Override
-    public void mutate() {
-        List<Connection> connections = this.getConnections();
-        int toMutateIndex = this.getRandom().nextInt(connections.size());
-        Connection toMutate = connections.get(toMutateIndex);
-        toMutate.setWeight(this.mutateValue(toMutate.getWeight()));
-    }
-
-    @Override
     protected List<Connection> initConnections() {
         List<Connection> connections = new ArrayList<>();
         NeuralLayer fromLayer = this.getInputLayer();

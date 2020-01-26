@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class SelectionProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(SelectionProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SelectionProcessor.class);
 
     private Trial trial;
     private Selection selection;
@@ -23,7 +23,7 @@ public class SelectionProcessor {
     private double crossoverChances;
 
     public SelectionProcessor(Trial trial) {
-        this(trial, SelectionType.ROULETTE.getSelectionImpl(), 0.05, 0.5);
+        this(trial, SelectionType.ROULETTE.getSelectionImpl(), 0.005, 0.7);
     }
 
     public SelectionProcessor(Trial trial, Selection selection, double mutationChances, double crossoverChances) {
@@ -33,32 +33,31 @@ public class SelectionProcessor {
         this.crossoverChances = crossoverChances;
     }
 
-    public Individual start(List<Individual> population, int generationCount, double objectiveFitness) throws NNException {
+    public Individual start(List<Individual> population, int generationCount, double objectiveFitness, double acceptedDelta) throws NNException {
         for (Individual i : population) {
             i.initialize();
         }
         Individual bestIndiv = null;
         for (int i = 1; i <= generationCount; i++) {
-            logger.debug("------ START GENERATION {} ------", i);
-            for (Individual indiv : population) {
-                indiv.setFitness(this.trial.getFitness(indiv));
-            }
+            SelectionProcessor.LOGGER.debug("------ START GENERATION {} ------", i);
+            population.forEach(indiv -> indiv.setFitness(0));
+            this.trial.execute(population);
 
-            bestIndiv = CloneUtil.INSTANCE.deepCopy(this.findBestIndividual(population));
+            bestIndiv = CloneUtil.INSTANCE.deepCopy(this.findBestIndividual(population, objectiveFitness));
 
-            logger.debug("Best individual this generation (FITNESS)	: {}", bestIndiv.getFitness());
+            SelectionProcessor.LOGGER.debug("Best individual this generation (FITNESS)	: {}", bestIndiv.getFitness());
 
-            PopulationInfos infos = new PopulationInfos(population, i);
+            PopulationInfos infos = new PopulationInfos(population, i, objectiveFitness);
             this.trial.processBetweenGenerationsActions(infos);
 
-            if (bestIndiv.getFitness() >= objectiveFitness) {
-                logger.debug("Objective found");
+            if (Math.abs(objectiveFitness - bestIndiv.getFitness()) <= acceptedDelta) {
+                SelectionProcessor.LOGGER.debug("Objective found");
                 return bestIndiv;
             }
 
             ListsUtil.INSTANCE.shuffleList(population);
 
-            List<Pair<Individual>> breedingPopulation = this.selection.getNextGenerationParents(population);
+            List<Pair<Individual>> breedingPopulation = this.selection.getNextGenerationParents(population, objectiveFitness);
             population.clear();
             for (Pair<Individual> parents : breedingPopulation) {
                 population.add(this.breed(parents));
@@ -76,18 +75,18 @@ public class SelectionProcessor {
         if (rdm < this.crossoverChances) {
             child.crossover(parents.getRight());
         }
-        if (rdm < this.mutationChances) {
-            child.mutate();
-        }
 
-
+        child.mutate(this.mutationChances);
         return child;
     }
 
-    private Individual findBestIndividual(List<Individual> population) {
+    private Individual findBestIndividual(List<Individual> population, double objectiveFitness) {
         Individual bestIndividual = null;
+        double closest = Double.MAX_VALUE;
         for (Individual i : population) {
-            if (bestIndividual == null || i.getFitness() > bestIndividual.getFitness()) {
+            double distance = Math.abs(objectiveFitness - i.getFitness());
+            if (distance < closest) {
+                closest = distance;
                 bestIndividual = i;
             }
         }

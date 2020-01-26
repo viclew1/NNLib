@@ -38,7 +38,7 @@ public abstract class Individual {
     /**
      * Mutates some of the individual's genes
      */
-    public abstract void mutate() throws NNException;
+    public abstract void mutate(double mutationRate) throws NNException;
 
     /**
      * Returns the amount of input expected by this individual

@@ -1,12 +1,12 @@
 package fr.lewon.selection;
 
-import java.util.List;
-
 import fr.lewon.Individual;
 import fr.lewon.utils.Pair;
 
+import java.util.List;
+
 public abstract class Selection {
 
-	public abstract List<Pair<Individual>> getNextGenerationParents(List<Individual> population);
-	
+    public abstract List<Pair<Individual>> getNextGenerationParents(List<Individual> population, double objectiveFitnessTu);
+
 }

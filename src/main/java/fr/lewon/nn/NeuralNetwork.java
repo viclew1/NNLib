@@ -140,6 +140,16 @@ public abstract class NeuralNetwork extends Individual {
                 .collect(Collectors.groupingBy(c -> c.getTo(), TreeMap::new, Collectors.toList()));
     }
 
+    @Override
+    public void mutate(double mutationRate) {
+        for (Connection toMutate : this.connections) {
+            double rdm = this.getRandom().nextDouble();
+            if (rdm <= mutationRate) {
+                toMutate.setWeight(this.mutateValue(toMutate.getWeight()));
+            }
+        }
+    }
+
     public NeuralLayer getInputLayer() {
         return this.inputLayer;
     }
@@ -149,12 +159,12 @@ public abstract class NeuralNetwork extends Individual {
     }
 
     protected double mutateValue(double value) {
-        value += (-1 + this.getRandom().nextDouble() * 2) * DELTA_WEIGHT;
-        return Math.min(MAX_WEIGHT, Math.max(MIN_WEIGHT, value));
+        value += (-1 + this.getRandom().nextDouble() * 2) * NeuralNetwork.DELTA_WEIGHT;
+        return Math.min(NeuralNetwork.MAX_WEIGHT, Math.max(NeuralNetwork.MIN_WEIGHT, value));
     }
 
     protected double getRandomValue() {
-        return MIN_WEIGHT + this.getRandom().nextDouble() * (MAX_WEIGHT - MIN_WEIGHT);
+        return NeuralNetwork.MIN_WEIGHT + this.getRandom().nextDouble() * (NeuralNetwork.MAX_WEIGHT - NeuralNetwork.MIN_WEIGHT);
     }
 
 }

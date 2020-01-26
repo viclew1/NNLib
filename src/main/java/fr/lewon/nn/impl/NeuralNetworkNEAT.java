@@ -57,15 +57,11 @@ public class NeuralNetworkNEAT extends NeuralNetwork {
         this.defineNewConnections(allMyConnections);
     }
 
-    @Override
-    public void mutate() {
-        List<Connection> connections = this.getConnections();
-        if (this.getRandom().nextBoolean()) {
-            this.createConnection(connections);
-        } else {
-            this.divideConnection(connections);
+    private void mutateConnection(List<Connection> connections) {
+        if (!connections.isEmpty()) {
+            Connection toMutate = connections.get(this.getRandom().nextInt(connections.size()));
+            toMutate.setWeight(this.mutateValue(toMutate.getWeight()));
         }
-        this.defineNewConnections(connections);
     }
 
     private void createConnection(List<Connection> connections) {
