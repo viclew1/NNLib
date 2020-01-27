@@ -3,6 +3,7 @@ package fr.lewon;
 import fr.lewon.exceptions.NNException;
 import fr.lewon.selection.Selection;
 import fr.lewon.selection.SelectionType;
+import fr.lewon.ui.MainNNUiFrameController;
 import fr.lewon.utils.CloneUtil;
 import fr.lewon.utils.ListsUtil;
 import fr.lewon.utils.Pair;
@@ -21,6 +22,7 @@ public class SelectionProcessor {
     private Selection selection;
     private double mutationChances;
     private double crossoverChances;
+    private MainNNUiFrameController frameController;
 
     public SelectionProcessor(Trial trial) {
         this(trial, SelectionType.ROULETTE.getSelectionImpl(), 0.005, 0.7);
@@ -33,9 +35,13 @@ public class SelectionProcessor {
         this.crossoverChances = crossoverChances;
     }
 
-    public Individual start(List<Individual> population, int generationCount, double objectiveFitness, double acceptedDelta) throws NNException {
+    public Individual start(boolean showUi, List<Individual> population, int generationCount, double objectiveFitness, double acceptedDelta) throws NNException {
         for (Individual i : population) {
             i.initialize();
+        }
+        if (showUi) {
+            this.frameController = new MainNNUiFrameController();
+            this.frameController.getFrame().setVisible(true);
         }
         Individual bestIndiv = null;
         for (int i = 1; i <= generationCount; i++) {
@@ -47,8 +53,9 @@ public class SelectionProcessor {
 
             SelectionProcessor.LOGGER.debug("Best individual this generation (FITNESS)	: {}", bestIndiv.getFitness());
 
-            PopulationInfos infos = new PopulationInfos(population, i, objectiveFitness);
-            this.trial.processBetweenGenerationsActions(infos);
+            if (showUi) {
+                this.frameController.updateInfos(new PopulationInfos(population, i, objectiveFitness));
+            }
 
             if (Math.abs(objectiveFitness - bestIndiv.getFitness()) <= acceptedDelta) {
                 SelectionProcessor.LOGGER.debug("Objective found");
