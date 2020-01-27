@@ -11,6 +11,7 @@ import fr.lewon.utils.PopulationInfos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Random;
 
@@ -35,12 +36,17 @@ public class SelectionProcessor {
         this.crossoverChances = crossoverChances;
     }
 
-    public Individual start(boolean showUi, List<Individual> population, int generationCount, double objectiveFitness, double acceptedDelta) throws NNException {
+    public Individual start(List<Individual> population, int generationCount, double objectiveFitness, double acceptedDelta) throws NNException {
+        return this.start(false, null, population, generationCount, objectiveFitness, acceptedDelta);
+    }
+
+    public Individual start(boolean showUi, JPanel appPanel, List<Individual> population, int generationCount, double objectiveFitness, double acceptedDelta) throws NNException {
         for (Individual i : population) {
             i.initialize();
         }
         if (showUi) {
             this.frameController = new MainNNUiFrameController();
+            this.frameController.initAppPanel(appPanel);
             this.frameController.getFrame().setVisible(true);
         }
         Individual bestIndiv = null;

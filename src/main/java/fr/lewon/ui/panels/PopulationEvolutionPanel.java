@@ -5,7 +5,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.data.xy.DefaultXYDataset;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +30,6 @@ public class PopulationEvolutionPanel extends ChartPanel {
         this.averageDatas = new double[2][maxSize];
         dataset.addSeries("Average", this.averageDatas);
         dataset.addSeries("Best individual", this.bestScoreDatas);
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        super.getRootPane().updateUI();
-        super.paint(g);
-        this.getChart().getXYPlot().setDataset(this.getChart().getXYPlot().getDataset());
     }
 
     public void updateGraph(PopulationInfos infos) {
@@ -67,5 +59,6 @@ public class PopulationEvolutionPanel extends ChartPanel {
             this.averageDatas[0][i] = lastPointAverage[0];
             this.averageDatas[1][i] = lastPointAverage[1];
         }
+        this.getChart().getXYPlot().setDataset(this.getChart().getXYPlot().getDataset());
     }
 }

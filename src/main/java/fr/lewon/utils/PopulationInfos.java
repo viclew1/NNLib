@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class PopulationInfos {
 
+    private final List<Individual> sortedPopulation;
     private final int popCount;
     private final List<Double> scores;
     private final double minScore;
@@ -16,6 +17,9 @@ public class PopulationInfos {
     private final int generation;
 
     public PopulationInfos(List<Individual> population, int generation, double objectiveFitness) {
+        this.sortedPopulation = population.stream()
+                .sorted((i1, i2) -> Double.compare(i2.getFitness(), i1.getFitness()))
+                .collect(Collectors.toList());
         this.popCount = population.size();
         this.scores = population.stream()
                 .map(Individual::getFitness)
@@ -54,4 +58,7 @@ public class PopulationInfos {
         return this.generation;
     }
 
+    public List<Individual> getSortedPopulation() {
+        return this.sortedPopulation;
+    }
 }
