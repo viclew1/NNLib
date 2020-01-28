@@ -48,6 +48,7 @@ public class SelectionProcessor {
             this.frameController = new MainNNUiFrameController();
             this.frameController.initAppPanel(appPanel);
             this.frameController.getFrame().setVisible(true);
+            this.frameController.getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         Individual bestIndiv = null;
         for (int i = 1; i <= generationCount; i++) {

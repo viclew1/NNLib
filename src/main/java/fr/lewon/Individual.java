@@ -2,6 +2,8 @@ package fr.lewon;
 
 
 import fr.lewon.exceptions.NNException;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
 
 import java.util.List;
 import java.util.Random;
@@ -61,5 +63,7 @@ public abstract class Individual {
      * @return
      */
     public abstract List<Double> getOutputs(List<Double> inputs) throws NNException;
+
+    public abstract Graph<Long, DefaultEdge> buildGraph();
 
 }

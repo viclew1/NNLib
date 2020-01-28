@@ -3,6 +3,9 @@ package fr.lewon.nn;
 import fr.lewon.Individual;
 import fr.lewon.exceptions.InputCountException;
 import fr.lewon.exceptions.NNException;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -167,4 +170,18 @@ public abstract class NeuralNetwork extends Individual {
         return NeuralNetwork.MIN_WEIGHT + this.getRandom().nextDouble() * (NeuralNetwork.MAX_WEIGHT - NeuralNetwork.MIN_WEIGHT);
     }
 
+    @Override
+    public Graph<Long, DefaultEdge> buildGraph() {
+        Graph<Long, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        for (Connection c : this.getConnections()) {
+            if (!g.containsVertex(c.getFrom())) {
+                g.addVertex(c.getFrom());
+            }
+            if (!g.containsVertex(c.getTo())) {
+                g.addVertex(c.getTo());
+            }
+            g.addEdge(c.getFrom(), c.getTo(), new DefaultEdge());
+        }
+        return g;
+    }
 }
