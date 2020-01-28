@@ -75,6 +75,7 @@ public class SelectionProcessor {
             for (Pair<Individual> parents : breedingPopulation) {
                 population.add(this.breed(parents));
             }
+            population.set(0, CloneUtil.INSTANCE.deepCopy(bestIndiv));
         }
 
         return bestIndiv;

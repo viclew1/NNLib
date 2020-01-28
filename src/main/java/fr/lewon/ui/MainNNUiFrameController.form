@@ -1,49 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="fr.lewon.ui.MainNNUiFrameController">
-  <grid id="27dc6" binding="mainPane" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="aa485" binding="mainPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="1060" height="454"/>
+      <xy x="20" y="20" width="880" height="429"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="ee320" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="5" left="5" bottom="5" right="5"/>
+      <splitpane id="f6964">
         <constraints>
-          <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="350" height="-1"/>
+          <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <minimum-size width="-1" height="400"/>
+            <preferred-size width="200" height="200"/>
           </grid>
         </constraints>
         <properties/>
-        <clientProperties>
-          <html.disable class="java.lang.Boolean" value="false"/>
-        </clientProperties>
-        <border type="none" title="Population Evolution Graph"/>
+        <border type="none"/>
         <children>
-          <component id="7955e" class="fr.lewon.ui.panels.PopulationEvolutionPanel" binding="populationEvolutionPanel">
+          <grid id="2a95a" binding="appPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+              <splitpane position="left"/>
+            </constraints>
+            <properties>
+              <minimumSize width="300" height="23"/>
+            </properties>
+            <border type="none" title="Application Panel"/>
+            <children/>
+          </grid>
+          <splitpane id="179c0">
+            <constraints>
+              <splitpane position="right"/>
             </constraints>
             <properties/>
-          </component>
+            <border type="none"/>
+            <children>
+              <grid id="ee320" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="5" left="5" bottom="5" right="5"/>
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
+                <properties>
+                  <minimumSize width="300" height="57"/>
+                </properties>
+                <clientProperties>
+                  <html.disable class="java.lang.Boolean" value="false"/>
+                </clientProperties>
+                <border type="none" title="Population Evolution Graph"/>
+                <children>
+                  <component id="7955e" class="fr.lewon.ui.panels.PopulationEvolutionPanel" binding="populationEvolutionPanel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                </children>
+              </grid>
+              <splitpane id="12ea8">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties>
+                  <minimumSize width="150" height="193"/>
+                  <orientation value="0"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <grid id="ad5ca" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="5" left="5" bottom="5" right="5"/>
+                    <constraints>
+                      <splitpane position="left"/>
+                    </constraints>
+                    <properties>
+                      <minimumSize width="44" height="150"/>
+                    </properties>
+                    <border type="none" title="Individual display"/>
+                    <children>
+                      <nested-form id="f021b" form-file="fr/lewon/ui/panels/IndividualListPanel.form" binding="individualListPane">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                    </children>
+                  </grid>
+                  <grid id="9aa2d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="5" left="5" bottom="5" right="5"/>
+                    <constraints>
+                      <splitpane position="right"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none" title="Export tools"/>
+                    <children>
+                      <nested-form id="1842b" form-file="fr/lewon/ui/panels/ExportToolsPanel.form">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                    </children>
+                  </grid>
+                </children>
+              </splitpane>
+            </children>
+          </splitpane>
         </children>
-      </grid>
-      <grid id="ad5ca" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="5" left="5" bottom="5" right="5"/>
-        <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-        <border type="none" title="Individual display"/>
-        <children>
-          <nested-form id="f021b" form-file="fr/lewon/ui/panels/IndividualListPanel.form" binding="individualListPane">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </nested-form>
-        </children>
-      </grid>
+      </splitpane>
       <component id="7c3cd" class="javax.swing.JLabel" binding="status">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -52,31 +112,6 @@
           <text value="Status"/>
         </properties>
       </component>
-      <grid id="9aa2d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="5" left="5" bottom="5" right="5"/>
-        <constraints>
-          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-        <border type="none" title="Export tools"/>
-        <children>
-          <nested-form id="1842b" form-file="fr/lewon/ui/panels/ExportToolsPanel.form">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </nested-form>
-        </children>
-      </grid>
-      <grid id="2a95a" binding="appPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
-        <constraints>
-          <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="350" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-        <border type="none" title="Application Panel"/>
-        <children/>
-      </grid>
     </children>
   </grid>
 </form>

@@ -14,6 +14,7 @@ public class PopulationEvolutionPanel extends ChartPanel {
 
     private double[][] bestScoreDatas;
     private double[][] averageDatas;
+    private double[][] tendencyDatas;
     private List<PopulationInfos> graphInfos;
     private int maxSize;
 
@@ -28,8 +29,10 @@ public class PopulationEvolutionPanel extends ChartPanel {
         DefaultXYDataset dataset = (DefaultXYDataset) this.getChart().getXYPlot().getDataset();
         this.bestScoreDatas = new double[2][maxSize];
         this.averageDatas = new double[2][maxSize];
+        this.tendencyDatas = new double[2][maxSize];
         dataset.addSeries("Average", this.averageDatas);
         dataset.addSeries("Best individual", this.bestScoreDatas);
+        dataset.addSeries("Tendency", this.tendencyDatas);
     }
 
     public void updateGraph(PopulationInfos infos) {
@@ -38,26 +41,31 @@ public class PopulationEvolutionPanel extends ChartPanel {
         }
         this.graphInfos.add(infos);
 
-        double[] lastPointBestScore = new double[2];
-        double[] lastPointAverage = new double[2];
         for (int i = 0; i < this.graphInfos.size(); i++) {
             PopulationInfos inf = this.graphInfos.get(i);
             this.bestScoreDatas[0][1 + i] = inf.getGeneration();
             this.averageDatas[0][1 + i] = inf.getGeneration();
+            this.tendencyDatas[0][1 + i] = inf.getGeneration();
 
             this.bestScoreDatas[1][1 + i] = inf.getMaxScore();
             this.averageDatas[1][1 + i] = inf.getAverage();
 
-            lastPointBestScore[0] = this.bestScoreDatas[0][1 + i];
-            lastPointBestScore[1] = this.bestScoreDatas[1][1 + i];
-            lastPointAverage[0] = this.averageDatas[0][1 + i];
-            lastPointAverage[1] = this.averageDatas[1][1 + i];
+            List<Double> savedScores = new ArrayList<>();
+            for (int j = i - 10; j < i + 10; j++) {
+                if (j >= 0 && j < this.graphInfos.size()) {
+                    savedScores.add(this.bestScoreDatas[1][1 + j]);
+                }
+            }
+            this.tendencyDatas[1][1 + i] = savedScores.stream().mapToDouble(d -> d).average().orElse(0);
+
         }
         for (int i = this.graphInfos.size(); i < this.maxSize; i++) {
-            this.bestScoreDatas[0][i] = lastPointBestScore[0];
-            this.bestScoreDatas[1][i] = lastPointBestScore[1];
-            this.averageDatas[0][i] = lastPointAverage[0];
-            this.averageDatas[1][i] = lastPointAverage[1];
+            this.bestScoreDatas[0][i] = this.bestScoreDatas[0][this.graphInfos.size() - 1];
+            this.bestScoreDatas[1][i] = this.bestScoreDatas[1][this.graphInfos.size() - 1];
+            this.averageDatas[0][i] = this.averageDatas[0][this.graphInfos.size() - 1];
+            this.averageDatas[1][i] = this.averageDatas[1][this.graphInfos.size() - 1];
+            this.tendencyDatas[0][i] = this.tendencyDatas[0][this.graphInfos.size() - 1];
+            this.tendencyDatas[1][i] = this.tendencyDatas[1][this.graphInfos.size() - 1];
         }
         this.getChart().getXYPlot().setDataset(this.getChart().getXYPlot().getDataset());
     }
