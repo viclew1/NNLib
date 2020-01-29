@@ -3,10 +3,13 @@ package fr.lewon.nn;
 import fr.lewon.Individual;
 import fr.lewon.exceptions.InputCountException;
 import fr.lewon.exceptions.NNException;
+import fr.lewon.ui.util.ConnectionEdge;
+import fr.lewon.ui.util.VertexInfo;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
 
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -171,17 +174,40 @@ public abstract class NeuralNetwork extends Individual {
     }
 
     @Override
-    public Graph<Long, DefaultEdge> buildGraph() {
-        Graph<Long, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+    public Graph<VertexInfo, ConnectionEdge> buildGraph() {
+        Map<Long, VertexInfo> infoById = new HashMap<>();
+        Graph<VertexInfo, ConnectionEdge> g = new DefaultDirectedGraph<>(ConnectionEdge.class);
+        int inputCpt = 1;
+        int outputCpt = 1;
+        int biasCpt = 1;
+        int hiddenCpt = 1;
+        for (Long n : this.inputLayer.getNeurons()) {
+            this.addVertex(n, "Input " + inputCpt++, Color.LIGHT_GRAY, g, infoById);
+        }
+        for (Long n : this.outputLayer.getNeurons()) {
+            this.addVertex(n, "Output " + outputCpt++, Color.RED, g, infoById);
+        }
+        for (Long n : this.biasNeurons) {
+            this.addVertex(n, "Bias " + biasCpt++, Color.GREEN, g, infoById);
+        }
+
         for (Connection c : this.getConnections()) {
-            if (!g.containsVertex(c.getFrom())) {
-                g.addVertex(c.getFrom());
+            if (!infoById.containsKey(c.getFrom())) {
+                this.addVertex(c.getFrom(), "Hidden " + hiddenCpt++, Color.YELLOW, g, infoById);
             }
-            if (!g.containsVertex(c.getTo())) {
-                g.addVertex(c.getTo());
+            if (!infoById.containsKey(c.getTo())) {
+                this.addVertex(c.getTo(), "Hidden " + hiddenCpt++, Color.YELLOW, g, infoById);
             }
-            g.addEdge(c.getFrom(), c.getTo(), new DefaultEdge());
+            VertexInfo fromInfo = infoById.get(c.getFrom());
+            VertexInfo toInfo = infoById.get(c.getTo());
+            g.addEdge(fromInfo, toInfo, new ConnectionEdge(String.format("%.1f", c.getWeight())));
         }
         return g;
+    }
+
+    private void addVertex(Long id, String label, Color color, Graph<VertexInfo, ConnectionEdge> graph, Map<Long, VertexInfo> infoById) {
+        VertexInfo vi = new VertexInfo(id, label, color);
+        graph.addVertex(vi);
+        infoById.put(id, vi);
     }
 }

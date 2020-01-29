@@ -28,7 +28,7 @@ public class MainNNUiFrameController {
     }
 
     public void updateInfos(PopulationInfos populationInfos) {
-        this.frame.setTitle("NN evolution - Generation " + populationInfos.getGeneration());
+        this.frame.setTitle("NN Evolution - Generation " + populationInfos.getGeneration());
         this.populationEvolutionPanel.updateGraph(populationInfos);
         this.individualListPane.refreshIndividuals(populationInfos.getSortedPopulation());
         this.individualPane.updateIndividual(populationInfos.getSortedPopulation().get(0));

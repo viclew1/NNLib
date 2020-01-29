@@ -3,7 +3,7 @@
   <grid id="aa485" binding="mainPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="1124" height="552"/>
+      <xy x="20" y="20" width="1104" height="829"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -23,8 +23,8 @@
               <splitpane position="left"/>
             </constraints>
             <properties>
-              <minimumSize width="400" height="300"/>
-              <preferredSize width="400" height="300"/>
+              <minimumSize width="400" height="400"/>
+              <preferredSize width="400" height="400"/>
             </properties>
             <border type="none" title="Application Panel"/>
             <children/>
@@ -36,27 +36,6 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="ee320" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="5" left="5" bottom="5" right="5"/>
-                <constraints>
-                  <splitpane position="left"/>
-                </constraints>
-                <properties>
-                  <minimumSize width="400" height="57"/>
-                </properties>
-                <clientProperties>
-                  <html.disable class="java.lang.Boolean" value="false"/>
-                </clientProperties>
-                <border type="none" title="Population Evolution Graph"/>
-                <children>
-                  <component id="7955e" class="fr.lewon.ui.panels.PopulationEvolutionPanel" binding="populationEvolutionPanel">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                  </component>
-                </children>
-              </grid>
               <splitpane id="12ea8">
                 <constraints>
                   <splitpane position="right"/>
@@ -85,49 +64,70 @@
                       </nested-form>
                     </children>
                   </grid>
-                  <splitpane id="30f4b">
+                  <grid id="ad5ca" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="5" left="5" bottom="5" right="5"/>
                     <constraints>
                       <splitpane position="left"/>
                     </constraints>
                     <properties>
-                      <orientation value="0"/>
+                      <minimumSize width="-1" height="300"/>
                     </properties>
-                    <border type="none"/>
+                    <border type="none" title="Individual scores"/>
                     <children>
-                      <grid id="ad5ca" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="5" left="5" bottom="5" right="5"/>
+                      <nested-form id="f021b" form-file="fr/lewon/ui/panels/IndividualListPanel.form" binding="individualListPane">
                         <constraints>
-                          <splitpane position="left"/>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
-                        <properties>
-                          <minimumSize width="300" height="150"/>
-                        </properties>
-                        <border type="none" title="Individual scores"/>
-                        <children>
-                          <nested-form id="f021b" form-file="fr/lewon/ui/panels/IndividualListPanel.form" binding="individualListPane">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                          </nested-form>
-                        </children>
-                      </grid>
-                      <grid id="5fa06" layout-manager="BorderLayout" hgap="0" vgap="0">
-                        <constraints>
-                          <splitpane position="right"/>
-                        </constraints>
-                        <properties>
-                          <minimumSize width="300" height="300"/>
-                          <preferredSize width="300" height="300"/>
-                        </properties>
-                        <border type="none" title="Individual display"/>
-                        <children>
-                          <nested-form id="e5449" form-file="fr/lewon/ui/panels/IndividualPanel.form" binding="individualPane">
-                            <constraints border-constraint="Center"/>
-                          </nested-form>
-                        </children>
-                      </grid>
+                      </nested-form>
                     </children>
-                  </splitpane>
+                  </grid>
+                </children>
+              </splitpane>
+              <splitpane id="2ed01">
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
+                <properties>
+                  <orientation value="0"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <grid id="ee320" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="5" left="5" bottom="5" right="5"/>
+                    <constraints>
+                      <splitpane position="left"/>
+                    </constraints>
+                    <properties>
+                      <minimumSize width="400" height="400"/>
+                    </properties>
+                    <clientProperties>
+                      <html.disable class="java.lang.Boolean" value="false"/>
+                    </clientProperties>
+                    <border type="none" title="Population Evolution Graph"/>
+                    <children>
+                      <component id="7955e" class="fr.lewon.ui.panels.PopulationEvolutionPanel" binding="populationEvolutionPanel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                    </children>
+                  </grid>
+                  <grid id="5ea29" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <splitpane position="right"/>
+                    </constraints>
+                    <properties>
+                      <minimumSize width="300" height="300"/>
+                      <preferredSize width="300" height="300"/>
+                    </properties>
+                    <border type="none" title="Individual display"/>
+                    <children>
+                      <nested-form id="92fb3" form-file="fr/lewon/ui/panels/IndividualPanel.form" binding="individualPane">
+                        <constraints border-constraint="Center"/>
+                      </nested-form>
+                    </children>
+                  </grid>
                 </children>
               </splitpane>
             </children>

@@ -27,6 +27,7 @@ public class PopulationEvolutionPanel extends ChartPanel {
         this.maxSize = maxSize;
         this.graphInfos = new ArrayList<>(maxSize);
         DefaultXYDataset dataset = (DefaultXYDataset) this.getChart().getXYPlot().getDataset();
+        this.getChart().setBackgroundPaint(this.getBackground());
         this.bestScoreDatas = new double[2][maxSize];
         this.averageDatas = new double[2][maxSize];
         this.tendencyDatas = new double[2][maxSize];

@@ -1,93 +1,72 @@
 package fr.lewon.ui.panels;
 
-import com.mxgraph.layout.mxCompactTreeLayout;
-import com.mxgraph.layout.mxGraphLayout;
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.model.mxICell;
 import com.mxgraph.swing.mxGraphComponent;
 import fr.lewon.Individual;
+import fr.lewon.ui.util.ConnectionEdge;
+import fr.lewon.ui.util.VertexInfo;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
-import org.jgrapht.graph.DefaultEdge;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.util.HashMap;
 
-public class IndividualPanel extends JPanel implements MouseMotionListener, MouseListener {
+public class IndividualPanel extends JPanel implements MouseWheelListener {
 
     private static final long serialVersionUID = 354536610348394850L;
 
     private JPanel mainPane;
     private mxGraphComponent graphComponent;
-    private Point lastRegisteredPoint;
+    private JGraphXAdapter jgxAdapter;
+    private mxHierarchicalLayout layout;
 
     public IndividualPanel() {
         this.add(this.mainPane);
-        this.addMouseListener(this);
-        this.addMouseMotionListener(this);
-        this.setFocusable(true);
     }
 
     public void updateIndividual(Individual indiv) {
-        this.mainPane.removeAll();
-        Graph<Long, DefaultEdge> graph = indiv.buildGraph();
-        JGraphXAdapter jgxAdapter = new JGraphXAdapter<>(graph);
-        this.graphComponent = new mxGraphComponent(jgxAdapter);
-        mxGraphLayout layout = new mxCompactTreeLayout(jgxAdapter);
+        Graph<VertexInfo, ConnectionEdge> graph = indiv.buildGraph();
 
-        this.graphComponent.setConnectable(false);
-        this.graphComponent.getGraph().setCellsEditable(false);
-        this.graphComponent.getGraph().setAllowDanglingEdges(false);
-        this.graphComponent.getGraph().setVertexLabelsMovable(false);
-        this.graphComponent.getGraph().setCellsDisconnectable(false);
-        this.graphComponent.getGraph().setResetEdgesOnMove(true);
-        this.graphComponent.getGraph().refresh();
+        this.jgxAdapter = new JGraphXAdapter<>(graph);
+        this.graphComponent = new mxGraphComponent(this.jgxAdapter);
+        this.layout = new mxHierarchicalLayout(this.jgxAdapter);
 
-        layout.execute(jgxAdapter.getDefaultParent());
-        this.mainPane.add(this.graphComponent);
-    }
+        this.layout.setUseBoundingBox(false);
+        this.layout.setDisableEdgeStyle(true);
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        Point point = e.getPoint();
-        System.out.println("Lol" + this.lastRegisteredPoint + "/ " + point);
-        if (this.lastRegisteredPoint != null && this.graphComponent != null) {
-            double dx = point.getX() - this.lastRegisteredPoint.getX();
-            double dy = point.getY() - this.lastRegisteredPoint.getY();
-            this.graphComponent.setLocation((int) (this.graphComponent.getX() + dx), (int) (this.graphComponent.getY() + dy));
+        for (MouseWheelListener mwl : this.graphComponent.getMouseWheelListeners()) {
+            this.graphComponent.removeMouseWheelListener(mwl);
         }
-        this.lastRegisteredPoint = point;
+        this.graphComponent.addMouseWheelListener(this);
+        this.graphComponent.setFocusable(true);
+
+        HashMap<VertexInfo, mxICell> vertexToCellMap = this.jgxAdapter.getVertexToCellMap();
+        for (VertexInfo vi : graph.vertexSet()) {
+            this.jgxAdapter.setCellStyle("fillColor=" + vi.getHexColor(), new Object[]{vertexToCellMap.get(vi)});
+        }
+        this.layout.setOrientation(SwingConstants.WEST);
+        this.layout.setInterRankCellSpacing(200);
+        this.layout.setParallelEdgeSpacing(0);
+        this.jgxAdapter.setCellsEditable(false);
+        this.jgxAdapter.setAllowDanglingEdges(false);
+        this.jgxAdapter.setVertexLabelsMovable(false);
+        this.jgxAdapter.setCellsDisconnectable(false);
+        this.jgxAdapter.setResetEdgesOnMove(true);
+        this.jgxAdapter.setAutoSizeCells(true);
+
+        SwingUtilities.invokeLater(() -> {
+            this.mainPane.removeAll();
+            this.layout.execute(this.jgxAdapter.getDefaultParent());
+            this.jgxAdapter.refresh();
+            this.mainPane.add(this.graphComponent);
+        });
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        System.out.println("huhu");
-        this.lastRegisteredPoint = e.getPoint();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        System.out.println(e.getPreciseWheelRotation());
     }
 }

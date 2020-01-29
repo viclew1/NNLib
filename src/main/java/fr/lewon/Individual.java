@@ -2,8 +2,9 @@ package fr.lewon;
 
 
 import fr.lewon.exceptions.NNException;
+import fr.lewon.ui.util.ConnectionEdge;
+import fr.lewon.ui.util.VertexInfo;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
 
 import java.util.List;
 import java.util.Random;
@@ -64,6 +65,6 @@ public abstract class Individual {
      */
     public abstract List<Double> getOutputs(List<Double> inputs) throws NNException;
 
-    public abstract Graph<Long, DefaultEdge> buildGraph();
+    public abstract Graph<VertexInfo, ConnectionEdge> buildGraph();
 
 }
