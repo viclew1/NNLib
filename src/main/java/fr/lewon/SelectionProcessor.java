@@ -1,10 +1,10 @@
 package fr.lewon;
 
+import com.rits.cloning.Cloner;
 import fr.lewon.exceptions.NNException;
 import fr.lewon.selection.Selection;
 import fr.lewon.selection.SelectionType;
 import fr.lewon.ui.MainNNUiFrameController;
-import fr.lewon.utils.CloneUtil;
 import fr.lewon.utils.ListsUtil;
 import fr.lewon.utils.Pair;
 import fr.lewon.utils.PopulationInfos;
@@ -24,6 +24,7 @@ public class SelectionProcessor {
     private double mutationChances;
     private double crossoverChances;
     private MainNNUiFrameController frameController;
+    private Cloner cloner;
 
     public SelectionProcessor(Trial trial) {
         this(trial, SelectionType.ROULETTE.getSelectionImpl(), 0.005, 0.7);
@@ -34,6 +35,7 @@ public class SelectionProcessor {
         this.selection = selection;
         this.mutationChances = mutationChances;
         this.crossoverChances = crossoverChances;
+        this.cloner = new Cloner();
     }
 
     public Individual start(List<Individual> population, int generationCount, double objectiveFitness, double acceptedDelta) throws NNException {
@@ -56,7 +58,7 @@ public class SelectionProcessor {
             population.forEach(indiv -> indiv.setFitness(0));
             this.trial.execute(population);
 
-            bestIndiv = CloneUtil.INSTANCE.deepCopy(this.findBestIndividual(population, objectiveFitness));
+            bestIndiv = this.cloner.deepClone(this.findBestIndividual(population, objectiveFitness));
 
             SelectionProcessor.LOGGER.debug("Best individual this generation (FITNESS)	: {}", bestIndiv.getFitness());
 
@@ -76,7 +78,7 @@ public class SelectionProcessor {
             for (Pair<Individual> parents : breedingPopulation) {
                 population.add(this.breed(parents));
             }
-            population.set(0, CloneUtil.INSTANCE.deepCopy(bestIndiv));
+            population.set(0, this.cloner.deepClone(bestIndiv));
         }
 
         return bestIndiv;
@@ -84,7 +86,7 @@ public class SelectionProcessor {
 
     private Individual breed(Pair<Individual> parents) throws NNException {
         Random r = new Random();
-        Individual child = CloneUtil.INSTANCE.deepCopy(parents.getLeft());
+        Individual child = this.cloner.deepClone(parents.getLeft());
 
         double rdm = r.nextDouble();
         if (rdm < this.crossoverChances) {
