@@ -18,6 +18,8 @@ public class MainNNUiFrameController {
     private JPanel appPanel;
     private JPanel containedAppPanel;
     private IndividualPanel individualPane;
+    private JSplitPane mainSplitPane;
+    private JSplitPane subSplitPane;
 
     private JFrame frame;
 
@@ -36,7 +38,7 @@ public class MainNNUiFrameController {
         this.getFrame().repaint();
     }
 
-    public void initAppPanel(JPanel appPanel) {
+    public void initFrame(JPanel appPanel) {
         this.containedAppPanel = appPanel;
         if (appPanel != null) {
             this.appPanel.add(this.containedAppPanel);
@@ -47,9 +49,14 @@ public class MainNNUiFrameController {
                 }
             });
         } else {
-            this.mainPane.remove(this.appPanel);
+            this.getFrame().setContentPane(this.subSplitPane);
         }
-        this.frame.pack();
+
+        this.getFrame().setMinimumSize(this.getFrame().getContentPane().getMinimumSize());
+        this.getFrame().setPreferredSize(this.getFrame().getContentPane().getPreferredSize());
+        this.getFrame().pack();
+        this.getFrame().setVisible(true);
+        this.getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public JFrame getFrame() {

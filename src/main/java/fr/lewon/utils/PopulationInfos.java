@@ -17,17 +17,17 @@ public class PopulationInfos {
     private final int generation;
 
     public PopulationInfos(List<Individual> population, int generation, double objectiveFitness) {
+        Comparator<Double> comp = (s1, s2) -> Double.compare(Math.abs(s2 - objectiveFitness), Math.abs(s1 - objectiveFitness));
         this.sortedPopulation = population.stream()
-                .sorted((i1, i2) -> Double.compare(i2.getFitness(), i1.getFitness()))
+                .sorted((i1, i2) -> comp.compare(i2.getFitness(), i1.getFitness()))
                 .collect(Collectors.toList());
         this.popCount = population.size();
         this.scores = population.stream()
                 .map(Individual::getFitness)
                 .collect(Collectors.toList());
 
-        Comparator<Double> comp = (s1, s2) -> Math.abs(s2 - objectiveFitness) - Math.abs(s1 - objectiveFitness) > 0 ? 1 : -1;
-        this.maxScore = this.scores.stream().max(comp).orElse(Double.MIN_VALUE);
-        this.minScore = this.scores.stream().min(comp).orElse(Double.MIN_VALUE);
+        this.maxScore = this.sortedPopulation.get(0).getFitness();
+        this.minScore = this.sortedPopulation.get(this.sortedPopulation.size() - 1).getFitness();
 
         this.average = this.scores.stream().reduce(0d, (s1, s2) -> s1 + s2) / this.popCount;
         this.generation = generation;

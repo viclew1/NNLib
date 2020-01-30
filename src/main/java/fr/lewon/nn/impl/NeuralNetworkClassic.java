@@ -70,4 +70,13 @@ public class NeuralNetworkClassic extends NeuralNetwork {
         return connections;
     }
 
+    @Override
+    public void mutate(double mutationRate) {
+        for (Connection toMutate : this.getConnections()) {
+            if (this.getRandom().nextDouble() <= mutationRate) {
+                toMutate.setWeight(this.mutateValue(toMutate.getWeight()));
+            }
+        }
+    }
+
 }

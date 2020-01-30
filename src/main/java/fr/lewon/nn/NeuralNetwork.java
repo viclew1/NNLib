@@ -17,7 +17,7 @@ public abstract class NeuralNetwork extends Individual {
 
     public static final double MIN_WEIGHT = -10;
     public static final double MAX_WEIGHT = 10;
-    public static final double DELTA_WEIGHT = 1;
+    public static final double DELTA_WEIGHT = 0.1;
 
     private long neuronCpt = 1;
 
@@ -144,16 +144,6 @@ public abstract class NeuralNetwork extends Individual {
         this.connections = connections;
         this.connectionsByDestId = connections.stream()
                 .collect(Collectors.groupingBy(c -> c.getTo(), TreeMap::new, Collectors.toList()));
-    }
-
-    @Override
-    public void mutate(double mutationRate) {
-        for (Connection toMutate : this.connections) {
-            double rdm = this.getRandom().nextDouble();
-            if (rdm <= mutationRate) {
-                toMutate.setWeight(this.mutateValue(toMutate.getWeight()));
-            }
-        }
     }
 
     public NeuralLayer getInputLayer() {

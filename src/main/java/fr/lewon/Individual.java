@@ -35,11 +35,15 @@ public abstract class Individual {
      * Mixes the individual's genes with the passed individual's genes
      *
      * @param individual
+     * @throws NNException
      */
     public abstract void crossover(Individual individual) throws NNException;
 
     /**
      * Mutates some of the individual's genes
+     *
+     * @param mutationRate
+     * @throws NNException
      */
     public abstract void mutate(double mutationRate) throws NNException;
 
@@ -62,6 +66,7 @@ public abstract class Individual {
      *
      * @param inputs
      * @return
+     * @throws NNException
      */
     public abstract List<Double> getOutputs(List<Double> inputs) throws NNException;
 

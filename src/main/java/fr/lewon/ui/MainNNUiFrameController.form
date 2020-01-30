@@ -5,14 +5,17 @@
     <constraints>
       <xy x="20" y="20" width="1104" height="829"/>
     </constraints>
-    <properties/>
+    <properties>
+      <minimumSize width="-1" height="-1"/>
+      <preferredSize width="1200" height="700"/>
+    </properties>
     <border type="none"/>
     <children>
-      <splitpane id="f6964">
+      <splitpane id="f6964" binding="mainSplitPane">
         <constraints>
           <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="1100" height="800"/>
-            <preferred-size width="1100" height="800"/>
+            <minimum-size width="800" height="500"/>
+            <preferred-size width="1200" height="700"/>
           </grid>
         </constraints>
         <properties/>
@@ -23,17 +26,20 @@
               <splitpane position="left"/>
             </constraints>
             <properties>
-              <minimumSize width="400" height="400"/>
-              <preferredSize width="400" height="400"/>
+              <minimumSize width="300" height="500"/>
+              <preferredSize width="400" height="700"/>
             </properties>
             <border type="none" title="Application Panel"/>
             <children/>
           </grid>
-          <splitpane id="179c0">
+          <splitpane id="179c0" binding="subSplitPane">
             <constraints>
               <splitpane position="right"/>
             </constraints>
-            <properties/>
+            <properties>
+              <minimumSize width="500" height="500"/>
+              <preferredSize width="800" height="700"/>
+            </properties>
             <border type="none"/>
             <children>
               <splitpane id="12ea8">
@@ -41,8 +47,10 @@
                   <splitpane position="right"/>
                 </constraints>
                 <properties>
-                  <minimumSize width="300" height="800"/>
+                  <minimumSize width="250" height="500"/>
+                  <oneTouchExpandable value="true"/>
                   <orientation value="0"/>
+                  <preferredSize width="300" height="700"/>
                 </properties>
                 <border type="none"/>
                 <children>
@@ -52,7 +60,7 @@
                       <splitpane position="right"/>
                     </constraints>
                     <properties>
-                      <minimumSize width="300" height="106"/>
+                      <minimumSize width="250" height="150"/>
                       <preferredSize width="300" height="150"/>
                     </properties>
                     <border type="none" title="Export tools"/>
@@ -70,7 +78,8 @@
                       <splitpane position="left"/>
                     </constraints>
                     <properties>
-                      <minimumSize width="-1" height="300"/>
+                      <minimumSize width="250" height="250"/>
+                      <preferredSize width="300" height="400"/>
                     </properties>
                     <border type="none" title="Individual scores"/>
                     <children>
@@ -88,7 +97,10 @@
                   <splitpane position="left"/>
                 </constraints>
                 <properties>
+                  <minimumSize width="250" height="500"/>
                   <orientation value="0"/>
+                  <preferredSize width="500" height="700"/>
+                  <resizeWeight value="0.0"/>
                 </properties>
                 <border type="none"/>
                 <children>
@@ -98,7 +110,8 @@
                       <splitpane position="left"/>
                     </constraints>
                     <properties>
-                      <minimumSize width="400" height="400"/>
+                      <minimumSize width="250" height="250"/>
+                      <preferredSize width="500" height="400"/>
                     </properties>
                     <clientProperties>
                       <html.disable class="java.lang.Boolean" value="false"/>
@@ -118,8 +131,8 @@
                       <splitpane position="right"/>
                     </constraints>
                     <properties>
-                      <minimumSize width="300" height="300"/>
-                      <preferredSize width="300" height="300"/>
+                      <minimumSize width="250" height="250"/>
+                      <preferredSize width="500" height="300"/>
                     </properties>
                     <border type="none" title="Individual display"/>
                     <children>

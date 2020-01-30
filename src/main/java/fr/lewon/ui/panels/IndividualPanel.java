@@ -62,11 +62,12 @@ public class IndividualPanel extends JPanel implements MouseWheelListener {
             this.layout.execute(this.jgxAdapter.getDefaultParent());
             this.jgxAdapter.refresh();
             this.mainPane.add(this.graphComponent);
+            this.mainPane.getRootPane().updateUI();
         });
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        System.out.println(e.getPreciseWheelRotation());
+        //TODO impl zoom
     }
 }

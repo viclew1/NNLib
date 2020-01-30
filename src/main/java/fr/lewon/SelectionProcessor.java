@@ -47,10 +47,7 @@ public class SelectionProcessor {
             i.initialize();
         }
         if (showUi) {
-            this.frameController = new MainNNUiFrameController();
-            this.frameController.initAppPanel(appPanel);
-            this.frameController.getFrame().setVisible(true);
-            this.frameController.getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.initUI(appPanel);
         }
         Individual bestIndiv = null;
         for (int i = 1; i <= generationCount; i++) {
@@ -82,6 +79,11 @@ public class SelectionProcessor {
         }
 
         return bestIndiv;
+    }
+
+    private void initUI(JPanel appPanel) {
+        this.frameController = new MainNNUiFrameController();
+        this.frameController.initFrame(appPanel);
     }
 
     private Individual breed(Pair<Individual> parents) throws NNException {
