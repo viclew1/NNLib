@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 public class MainNNUiFrameController {
 
     private JLabel status;
-    private JPanel mainPane;
     private PopulationEvolutionPanel populationEvolutionPanel;
     private IndividualListPanel individualListPane;
     private JPanel appPanel;
@@ -22,12 +21,6 @@ public class MainNNUiFrameController {
     private JSplitPane subSplitPane;
 
     private JFrame frame;
-
-    public MainNNUiFrameController() {
-        this.frame = new JFrame("NN Evolution");
-        this.frame.setContentPane(this.mainPane);
-        this.status.setText("Initialization OK");
-    }
 
     public void updateInfos(PopulationInfos populationInfos) {
         this.frame.setTitle("NN Evolution - Generation " + populationInfos.getGeneration());
@@ -39,6 +32,7 @@ public class MainNNUiFrameController {
     }
 
     public void initFrame(JPanel appPanel) {
+        this.frame = new JFrame("NN Evolution");
         this.containedAppPanel = appPanel;
         if (appPanel != null) {
             this.appPanel.add(this.containedAppPanel);
@@ -48,6 +42,7 @@ public class MainNNUiFrameController {
                     MainNNUiFrameController.this.containedAppPanel.grabFocus();
                 }
             });
+            this.getFrame().setContentPane(this.mainSplitPane);
         } else {
             this.getFrame().setContentPane(this.subSplitPane);
         }
@@ -57,6 +52,7 @@ public class MainNNUiFrameController {
         this.getFrame().pack();
         this.getFrame().setVisible(true);
         this.getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.status.setText("Initialization OK");
     }
 
     public JFrame getFrame() {
