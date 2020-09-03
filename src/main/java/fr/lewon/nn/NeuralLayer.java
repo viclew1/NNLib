@@ -5,35 +5,45 @@ import java.util.List;
 
 public class NeuralLayer {
 
-	private BiasNeuron bias;
-	private List<AbstractNeuron> neurons;
+    private Long biasNeuron;
+    private List<Long> neurons;
 
-	
-	public NeuralLayer(BiasNeuron bias, List<AbstractNeuron> neurons) {
-		this.bias = bias;
-		this.neurons = neurons;
-	}
+    public NeuralLayer(List<Long> neurons) {
+        this(null, neurons);
+    }
 
+    public NeuralLayer(Long biasNeuron, List<Long> neurons) {
+        this.biasNeuron = biasNeuron;
+        this.neurons = neurons;
+    }
 
-	public List<AbstractNeuron> getAllNeurons() {
-		List<AbstractNeuron> allNeurons = new ArrayList<>();
-		allNeurons.addAll(neurons);
-		if (bias != null) {
-			allNeurons.add(bias);
-		}
-		return allNeurons;
-	}
-	
-	public BiasNeuron getBias() {
-		return bias;
-	}
-	public void setBias(BiasNeuron bias) {
-		this.bias = bias;
-	}
-	public List<AbstractNeuron> getNeurons() {
-		return neurons;
-	}
-	public void setNeurons(List<AbstractNeuron> neurons) {
-		this.neurons = neurons;
-	}
+    /**
+     * returns the neurons of this layer and the bias neuron if there is one
+     *
+     * @return
+     */
+    public List<Long> getAllNeurons() {
+        List<Long> allNeurons = new ArrayList<>(this.getNeurons());
+        if (this.biasNeuron != null) {
+            allNeurons.add(this.biasNeuron);
+        }
+        return allNeurons;
+    }
+
+    public Long getBiasNeuron() {
+        return this.biasNeuron;
+    }
+
+    public void setBiasNeuron(Long biasNeuron) {
+        this.biasNeuron = biasNeuron;
+    }
+
+    public List<Long> getNeurons() {
+        return this.neurons;
+    }
+
+    public void setNeurons(List<Long> neurons) {
+        this.neurons = neurons;
+    }
+
 }

@@ -1,39 +1,43 @@
 package fr.lewon.selection.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import fr.lewon.Individual;
 import fr.lewon.selection.Selection;
 import fr.lewon.utils.Pair;
 
-public class RouletteSelection implements Selection {
+import java.util.*;
 
-	@Override
-	public List<Pair<Individual>> getNextGenerationParents(List<Individual> population) {
-		double fitnessSum = 0;
-		for (Individual i : population) {
-			fitnessSum += i.getFitness();
-		}
-		
-		List<Pair<Individual>> nextGenerationParents = new ArrayList<>(population.size());
-		for (int i=0 ; i<population.size() ; i++) {
-			nextGenerationParents.add(new Pair<>(selectIndividuRoulette(population, fitnessSum), selectIndividuRoulette(population, fitnessSum)));
-		}
-		return nextGenerationParents;
-	}
+public class RouletteSelection extends Selection {
 
-	private Individual selectIndividuRoulette(List<Individual> population, double fitnessSum) {
-		double partialFitnessSum = 0;
-		double randomDouble = new Random().nextDouble() * fitnessSum;
-		for (int i = population.size() - 1 ; i >= 0 ; i--) {
-			partialFitnessSum += population.get(i).getFitness();
-			if (partialFitnessSum >= randomDouble) {
-				return population.get(i);
-			}
-		}
-		return null;
-	}
+    @Override
+    public List<Pair<Individual>> getNextGenerationParents(List<Individual> population, double objectiveFitness) {
+        Map<Individual, Double> relativeFitnessByIndividual = new HashMap<>();
+        population.forEach(i -> relativeFitnessByIndividual.put(i, Math.abs(objectiveFitness - i.getFitness())));
+
+        double farthestScore = relativeFitnessByIndividual.values().stream().mapToDouble(d -> d).max().getAsDouble();
+        relativeFitnessByIndividual.entrySet().forEach(e -> e.setValue(farthestScore - e.getValue()));
+
+        double fitnessSum = population.stream()
+                .mapToDouble(i -> relativeFitnessByIndividual.get(i))
+                .sum();
+
+        List<Pair<Individual>> nextGenerationParents = new ArrayList<>(population.size());
+        for (int i = 0; i < population.size(); i++) {
+            nextGenerationParents.add(new Pair<>(this.selectIndividualRoulette(relativeFitnessByIndividual, fitnessSum), this.selectIndividualRoulette(relativeFitnessByIndividual, fitnessSum)));
+        }
+        return nextGenerationParents;
+    }
+
+    private Individual selectIndividualRoulette(Map<Individual, Double> relativeFitnessByIndividual, double fitnessSum) {
+        double partialFitnessSum = 0;
+        double randomDouble = new Random().nextDouble() * fitnessSum;
+        List<Map.Entry<Individual, Double>> entries = new ArrayList<>(relativeFitnessByIndividual.entrySet());
+        for (int i = entries.size() - 1; i >= 0; i--) {
+            partialFitnessSum += entries.get(i).getValue();
+            if (partialFitnessSum >= randomDouble) {
+                return entries.get(i).getKey();
+            }
+        }
+        return null;
+    }
 
 }
